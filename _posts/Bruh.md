@@ -1,6 +1,0 @@
----
-published: false
----
-## Whoah
-
-Mon site est déjà beugé. XD
