@@ -2,14 +2,16 @@
 layout: page
 title: About
 permalink: /about/
+published: true
 ---
 
-Some information about you!
+Je voulez créer un blog avec des astuces et des programmes tech pour mes potes.
 
-### More Information
+### Moi
 
-A place to include any other types of information that you'd like to include about yourself.
+Je m'appelle Thibault et je suis étudiant en Informatique.
+Voilà et je touche aux ordi depuis mes 4 ans.
 
-### Contact me
+### Tu veux me parler ?
 
-[email@domain.com](mailto:email@domain.com)
+Ok, voici mon [email](mailto:thibault.savenkoff@outlook.fr).
