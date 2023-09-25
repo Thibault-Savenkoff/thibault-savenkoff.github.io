@@ -1,0 +1,50 @@
+---
+layout: post
+title: Extensions pour une Sécurité Optimale
+published: true
+---
+
+## Extensions pour une Sécurité Optimale
+
+Je vais vous présenter trois extensions qui vous permettront de naviguer sur le web en toute sécurité.
+
+1. [Privacy Badger] & [Ghostery]
+
+Ils **bloquent** les **traqueurs**, y compris les **traqueurs tiers**, les **traqueurs propriétaires** et les **traqueurs sociaux**. 
+
+En **court**, toutes les **pubs Facebook** qui *essayent* de savoir quel **télé** allez vous **achetez**.
+
+2. [HTTPS Everywhere]
+
+Par les mêmes créateurs que **Privacy Badger**, cette extension visée à mettre **tous les sites web** en **https** pour une **sécurité optimal**.
+
+Mais depuis **janvier 2023**, elle est **obsolète** car les **navigateurs** offrent désormais cette **[fonction]** de *base*.
+
+3. [uBlock Origin]
+
+Marre des **ces pubs imposantes** et **des popups**, mais **pas de bol**, ***AdBlock*** est devenu **payant**, comment faire ?
+
+J’ai la solution, ***uBlock Origin***, qui en plus de **bloquer les pubs imposantes** bloque aussi **le site** que votre ami vous donne avec **des virus**. (S/O Virus Total)  
+
+Ce qui est **incroyable**, pour ne pas se faire **pirater** son PC.
+
+5. [NoScript]
+
+Il bloque **les scripts JS** avant qu’ils ne soient **exécutés**, ce qui permet de bloquer **les attaques XSS**.
+
+Super **pratique** sur ***Tor*** pour ne pas se faire **révéler son IP**.
+
+---
+
+Vous allez surement vous dire, 
+
+pourquoi autant d'extensions qui font la même chose ?
+
+La réponse est toute simple plus vous avez d'extensions qui font la même chose plus vous êtes protégé.
+
+[Privacy Badger]: https://privacybadger.org/fr/
+[HTTPS Everywhere]: https://www.eff.org/https-everywhere
+[fonction]: https://www.eff.org/https-everywhere/set-https-default-your-browser
+[uBlock Origin]: https://ublockorigin.com/fr
+[Ghostery]: https://www.ghostery.com/
+[NoScript]: https://noscript.net/

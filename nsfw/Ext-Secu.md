@@ -1,0 +1,51 @@
+---
+layout: nsfw-post
+title: Extensions pour une Sécurité Optimale
+permalink: nsfw/Extensions pour une Sécurité Optimale/
+published: true
+---
+
+## Extensions pour une Sécurité Optimale
+
+Je vais vous présenter **trois extensions** qui vous *permettront* de **naviguer** sur le *web* en **toute sécurité**.
+
+1. [Privacy Badger] & [Ghostery]
+
+Ils **bloquent** les **traqueurs**, y compris les **traqueurs tiers**, les **traqueurs propriétaires** et les **traqueurs sociaux**.
+
+En **gros**, toutes les **pubs de merdes** qui *essayent* de *savoir* sur quoi vous vous **branlez** le soir.
+
+2. [HTTPS Everywhere]
+
+Par les mêmes créateurs que ***Privacy Badger***, cette extension vise à mettre **tous les sites web** en **https** pour une **sécurité optimal**.
+
+Mais depuis **janvier 2023**, elle est **obsolète** car **les navigateurs** offrent *désormais* cette **[fonction]** de *base*.
+
+3. [uBlock Origin]
+
+Marre des **ces pubs de merde** et **des popups casse-couilles**, mais fait **chier**, ***AdBlock*** est devenu **payant**, comment faire ?
+
+J’ai la solution, ***uBlock Origin***, qui en plus de **bloquer les pubs de merde** bloque aussi **le site de merde** de votre **con** d’ami. (S/O Virus Total)
+
+Ce qui est **incroyable**, pour ne pas se faire **niquer** son PC.
+
+4. [NoScript]
+
+Il bloque **les scripts JS** avant qu’ils ne soient **exécutés**, ce qui permet de bloquer **les attaques XSS**.
+
+Super **pratique** sur ***Tor*** pour ne pas se faire **révéler son IP**.
+
+---
+
+Vous allez surement vous dire, 
+
+pourquoi autant d'extensions qui font la même chose ?
+
+La réponse est toute simple plus vous avez d'extensions qui font la même chose plus vous êtes protégé.
+
+[Privacy Badger]: https://privacybadger.org/fr/
+[HTTPS Everywhere]: https://www.eff.org/https-everywhere
+[fonction]: https://www.eff.org/https-everywhere/set-https-default-your-browser
+[uBlock Origin]: https://ublockorigin.com/fr
+[Ghostery]: https://www.ghostery.com/
+[NoScript]: https://noscript.net/
