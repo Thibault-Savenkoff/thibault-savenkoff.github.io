@@ -1,5 +1,5 @@
 ---
-layout: sfw-post
+layout: post
 title: IronVest
 published: true
 ---
