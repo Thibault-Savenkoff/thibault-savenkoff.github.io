@@ -5,6 +5,8 @@
 # Name of your site (displayed in the header)
 title: J'ai pas d'idée
 
+relative_permalinks: false
+
 # Short bio or description (displayed in the header)
 description: Étudiant dans l'Informatique.
 
@@ -84,5 +86,3 @@ exclude:
   - LICENSE
   - README.md
   - CNAME
-
-relative_permalinks: false
