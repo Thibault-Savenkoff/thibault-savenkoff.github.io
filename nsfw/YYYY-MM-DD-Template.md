@@ -1,6 +1,6 @@
 ---
 layout: nsfw-post
 title: Template
-permalink: nsfw/{{ page.title }}/
+permalink: nsfw/"File Name"/
 published: false
 ---
