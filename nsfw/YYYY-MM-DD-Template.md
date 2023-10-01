@@ -1,6 +1,6 @@
 ---
 layout: nsfw-post
 title: Template
-permalink: nsfw/"File Name"/
+permalink: nsfw/File-Name/
 published: false
 ---
