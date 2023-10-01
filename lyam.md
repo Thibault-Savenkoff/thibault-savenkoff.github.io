@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Lyam
-permalink: /lyam/
+permalink: /Lyam/
 published: true
 ---
 

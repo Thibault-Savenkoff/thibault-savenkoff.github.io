@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Loïc
-permalink: /loïc/
+permalink: /Loïc/
 published: true
 ---
 
