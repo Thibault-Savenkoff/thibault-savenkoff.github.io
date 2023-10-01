@@ -1,6 +1,6 @@
 ---
 layout: nsfw-post
-title: Template
+title: Virus Total
 permalink: nsfw/Virus-Total/
 published: true
 ---
