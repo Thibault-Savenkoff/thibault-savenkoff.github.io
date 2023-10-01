@@ -8,7 +8,7 @@ Vous avez *reçu* un dm ***Discord*** de votre *pote* qui vous donne un *site* a
 
 Et vous, en ayant **pas** beacoup d'**argent**, allez **télécharger tous les jeux trop chers** pour vous ?
 
-***Mais erreur !*** 
+***Mais erreur !***
 
 Votre **ami** a en *réalité* trouvé un site avec des jeux **tous infectés** par des [***Trojans***](https://fr.wikipedia.org/wiki/Cheval_de_Troie_(informatique)) ou autres types de virus.
 
@@ -22,6 +22,6 @@ Attention toutefois au **faux-positifs**, car certains **anti-virus** peuvent cr
 
 *Bref*, pour faire **analyser vos fichiers**, vous avez **trois solutions** :
 
-* [***VirusTotal.com***](https://virustotal.com)
-* l'Extension [***VT4Browsers***](https://support.virustotal.com/hc/en-us/articles/115002700745-Browser-Extensions)
-* [***VirusTotalUploader***](https://github.com/SamuelTulach/VirusTotalUploader) (Une application ***Windows***, **Open Source**, mais qui *requiert* un *compte* ***Virus Total*** **gratuit**.)
+* [***VirusTotal.com***](https://virustotal.com/)
+* l'Extension [***VT4Browsers***](https://support.virustotal.com/hc/en-us/articles/115002700745-Browser-Extensions/)
+* [***VirusTotalUploader***](https://github.com/SamuelTulach/VirusTotalUploader/) (Une application ***Windows***, **Open Source**, mais qui *requiert* un *compte* ***Virus Total*** **gratuit**.)

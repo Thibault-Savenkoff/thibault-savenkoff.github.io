@@ -17,11 +17,11 @@ Et **toutes vos informations personnelles** et la *dickpick* que vous avez prise
 
 Ce qui n’arrivera **presque jamais** si vous *scannez* vos *fichiers* avec ***Virus Total***.
 
-**VT** fait *analyser vos fichiers* par **69 antivirus** et vous *avertit* s’il y a un *virus* dans votre *fichier*.  
+**VT** fait *analyser vos fichiers* par **69 antivirus** et vous *avertit* s’il y a un *virus* dans votre *fichier*.
 
-Attention toutefois au **faux-positifs**, car certain **anti-virus** peut croire qu’il y a un **Trojan** dans le *fichier* alors que **non**. 
+Attention toutefois au **faux-positifs**, car certain **anti-virus** peut croire qu’il y a un **Trojan** dans le *fichier* alors que **non**.
 
-*Bref*, pour faire **analyser vos fichiers**, vous avez **trois solutions** : 
+*Bref*, pour faire **analyser vos fichiers**, vous avez **trois solutions** :
 
 * [***VirusTotal.com***](https://virustotal.com)
 
