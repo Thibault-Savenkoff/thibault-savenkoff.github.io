@@ -1,7 +1,7 @@
 ---
 layout: nsfw-post
-title: WingetUI
-permalink: /WingetUI/
+title: BleachBit
+permalink: /BleachBit/
 published: true
 ---
 
