@@ -1,6 +1,6 @@
 ---
 layout: sfw-post
-title: Windscribe
+title: Windscribe - VPN gratuit et sécurisé
 published: true
 ---
 

@@ -9,13 +9,9 @@ layout: default
     {{ content }}
   </div>
 
-  <div class="date">
-    <hr>
-    Écrit le {{ page.date | date: "%e/%m/%Y" }}
-  </div>
-
   <div class="warning">
-    Cette version du post est écrit et à prendre avec <b>humour</b> et au <b>second dégré</b>, dans aucun cas je veux vous bléssez personellement.
+    Cette version du post est écrit et à prendre avec <b>humour</b> et au <b>second dégré</b>, dans aucun cas je veux vous blésser personellement.
+    Pour voir la version classique du post, cliquez <a href="{{ site.baseurl }}/{{ page.url }}">ICI</a>.
   </div>
 
   {% include disqus.html %}

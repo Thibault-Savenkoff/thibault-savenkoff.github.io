@@ -1,6 +1,6 @@
 ---
 layout: sfw-post
-title: Waifu2x-Extension-GUI
+title: Waifu2x-Extension-GUI - Améliorer la qualité d'une image avec l'aide de l'IA
 published: true
 ---
 

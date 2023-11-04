@@ -1,6 +1,6 @@
 ---
 layout: nsfw-post
-title: RogueKiller
+title: RogueKiller - Anti-Malware
 permalink: nsfw/RogueKiller/
 published: true
 ---

@@ -1,6 +1,6 @@
 ---
 layout: nsfw-post
-title: Virus Total
+title: Virus Total - Pour se protéger des virus
 permalink: nsfw/Virus-Total/
 published: true
 ---

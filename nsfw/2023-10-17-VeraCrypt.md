@@ -1,6 +1,6 @@
 ---
 layout: nsfw-post
-title: VeraCrypt
+title: VeraCrypt - Chiffrer vos données personnelles
 permalink: /nsfw/VeraCrypt/
 published: true
 ---

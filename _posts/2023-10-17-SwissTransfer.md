@@ -1,6 +1,6 @@
 ---
 layout: sfw-post
-title: SwissTransfer
+title: SwissTransfer - Transfert de fichiers sécurisé
 published: true
 ---
 
