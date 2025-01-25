@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: sfw-post
 title: VeraCrypt - Chiffrer vos données personnelles
 published: true
 ---
