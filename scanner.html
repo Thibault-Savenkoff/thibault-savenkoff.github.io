@@ -18,14 +18,37 @@ layout: null
     header h1 { font-size: 20px; font-weight: 700; }
     header p  { font-size: 13px; color: #888; margin-top: 4px; }
 
-    #reader { width: 100% !important; max-width: 480px; border: none !important; }
-    #reader__dashboard_section_swaplink,
-    #reader__filescan_input { display: none !important; }
+    #viewport {
+      position: relative; width: 100%; max-width: 480px;
+      aspect-ratio: 4/3; background: #111; overflow: hidden;
+    }
+    #viewport video, #viewport canvas {
+      position: absolute; top: 0; left: 0;
+      width: 100% !important; height: 100% !important;
+      object-fit: cover;
+    }
+    #viewport canvas.drawingBuffer { display: none; }
+
+    /* Viseur */
+    #crosshair {
+      position: absolute; inset: 0; pointer-events: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .aim {
+      position: relative; width: 80%; height: 90px;
+      border: 2px solid rgba(255,255,255,0.25); border-radius: 4px;
+    }
+    .aim::before {
+      content: ""; position: absolute;
+      left: 0; right: 0; top: 50%; height: 2px;
+      background: linear-gradient(90deg, transparent, #7c8cf8 30%, #7c8cf8 70%, transparent);
+    }
 
     #status {
       width: 100%; max-width: 480px; padding: 10px 20px;
       font-size: 13px; color: #888; text-align: center; min-height: 38px;
     }
+
     #result-card {
       display: none; width: calc(100% - 40px); max-width: 440px;
       background: #1c1c1c; border: 1px solid #2e2e2e;
@@ -37,6 +60,7 @@ layout: null
     .btn { display: block; width: 100%; padding: 13px; border-radius: 10px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
     .btn-primary   { background: #7c8cf8; color: #fff; margin-bottom: 8px; }
     .btn-secondary { background: #2a2a2a; color: #ccc; }
+
     #manual { width: calc(100% - 40px); max-width: 440px; margin-top: 4px; padding-bottom: 32px; }
     #manual p { font-size: 12px; color: #555; text-align: center; margin-bottom: 10px; }
     #manual-row { display: flex; gap: 8px; }
@@ -52,10 +76,12 @@ layout: null
 
 <header>
   <h1>📚 Scanner ISBN</h1>
-  <p>Centrez le code-barres dans la zone</p>
+  <p>Centrez le code-barres dans la zone bleue</p>
 </header>
 
-<div id="reader"></div>
+<div id="viewport">
+  <div id="crosshair"><div class="aim"></div></div>
+</div>
 <div id="status">Chargement…</div>
 
 <div id="result-card">
@@ -73,7 +99,7 @@ layout: null
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.4/dist/quagga.min.js"></script>
 <script>
   const statusEl    = document.getElementById("status");
   const resultCard  = document.getElementById("result-card");
@@ -81,49 +107,62 @@ layout: null
   const copyBtn     = document.getElementById("copy-btn");
   const scanAgainBtn= document.getElementById("scan-again-btn");
 
-  let scanner  = null;
   let detected = "";
-  let stopped  = false;
+  let running  = false;
 
   function showResult(isbn) {
-    if (stopped) return;
-    stopped  = true;
     detected = isbn;
     isbnValue.textContent = isbn;
     resultCard.classList.add("visible");
-    statusEl.textContent  = "✅ ISBN détecté !";
-    if (scanner) scanner.stop().catch(() => {});
+    statusEl.textContent = "✅ ISBN détecté !";
+    Quagga.stop();
+    running = false;
   }
 
   function startScanner() {
-    stopped = false;
     resultCard.classList.remove("visible");
-    statusEl.textContent = "Pointez la caméra vers le code-barres";
+    statusEl.textContent = "Démarrage de la caméra…";
 
-    scanner = new Html5Qrcode("reader");
-    scanner.start(
-      { facingMode: "environment" },
-      {
-        fps: 15,
-        // Boîte horizontale adaptée aux codes-barres EAN
-        qrbox: { width: 300, height: 120 },
-        // ← CLEF : on spécifie explicitement EAN-13
-        formatsToSupport: [
-          Html5QrcodeSupportedFormats.EAN_13,
-          Html5QrcodeSupportedFormats.EAN_8,
-          Html5QrcodeSupportedFormats.UPC_A,
-          Html5QrcodeSupportedFormats.UPC_E
-        ]
-      },
-      (text) => {
-        if ((text.startsWith("978") || text.startsWith("979")) && text.length === 13) {
-          showResult(text);
+    Quagga.init({
+      inputStream: {
+        type: "LiveStream",
+        target: document.getElementById("viewport"),
+        constraints: {
+          width:  { min: 640 },
+          height: { min: 480 },
+          facingMode: "environment",
+          aspectRatio: { min: 1, max: 2 }
         }
       },
-      () => {}
-    ).catch(err => {
-      statusEl.textContent = "❌ Caméra inaccessible — utilisez la saisie manuelle.";
-      console.error(err);
+      locator: { patchSize: "medium", halfSample: true },
+      numOfWorkers: 0,   // ← obligatoire sur iOS Safari
+      frequency: 10,
+      decoder: {
+        readers: ["ean_reader", "ean_8_reader"],
+        debug: { drawBoundingBox: false, showFrequency: false }
+      },
+      locate: true
+    }, function(err) {
+      if (err) {
+        statusEl.textContent = "❌ " + err.message;
+        return;
+      }
+      Quagga.start();
+      running = true;
+      statusEl.textContent = "Pointez le code-barres dans la zone";
+    });
+
+    Quagga.onDetected(function(result) {
+      const code = result.codeResult.code;
+      const err  = result.codeResult.decodedCodes
+        .filter(x => x.error !== undefined)
+        .map(x => x.error);
+      const avgErr = err.length ? err.reduce((a,b) => a+b, 0) / err.length : 1;
+
+      // Filtre qualité + ISBN valide
+      if (avgErr < 0.15 && code.length === 13 && (code.startsWith("978") || code.startsWith("979"))) {
+        showResult(code);
+      }
     });
   }
 
