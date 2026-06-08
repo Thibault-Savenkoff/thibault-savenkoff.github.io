@@ -18,25 +18,14 @@ layout: null
     header h1 { font-size: 20px; font-weight: 700; }
     header p  { font-size: 13px; color: #888; margin-top: 4px; }
 
-    /* ZXing injecte une div#reader, on la stylise */
-    #reader {
-      width: 100% !important;
-      max-width: 480px;
-      border: none !important;
-      overflow: hidden;
-    }
-    /* Cache les éléments superflus de html5-qrcode */
+    #reader { width: 100% !important; max-width: 480px; border: none !important; }
     #reader__dashboard_section_swaplink,
-    #reader__filescan_input,
-    #reader__status_span { display: none !important; }
-    #reader__scan_region { border-radius: 0 !important; }
-    #reader video { width: 100% !important; }
+    #reader__filescan_input { display: none !important; }
 
     #status {
       width: 100%; max-width: 480px; padding: 10px 20px;
       font-size: 13px; color: #888; text-align: center; min-height: 38px;
     }
-
     #result-card {
       display: none; width: calc(100% - 40px); max-width: 440px;
       background: #1c1c1c; border: 1px solid #2e2e2e;
@@ -45,14 +34,9 @@ layout: null
     #result-card.visible { display: block; }
     #result-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
     #isbn-value   { font-size: 26px; font-weight: 700; letter-spacing: 2px; color: #fff; margin-bottom: 14px; }
-
-    .btn {
-      display: block; width: 100%; padding: 13px; border-radius: 10px;
-      border: none; font-size: 15px; font-weight: 600; cursor: pointer;
-    }
+    .btn { display: block; width: 100%; padding: 13px; border-radius: 10px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
     .btn-primary   { background: #7c8cf8; color: #fff; margin-bottom: 8px; }
     .btn-secondary { background: #2a2a2a; color: #ccc; }
-
     #manual { width: calc(100% - 40px); max-width: 440px; margin-top: 4px; padding-bottom: 32px; }
     #manual p { font-size: 12px; color: #555; text-align: center; margin-bottom: 10px; }
     #manual-row { display: flex; gap: 8px; }
@@ -61,17 +45,14 @@ layout: null
       border: 1px solid #2e2e2e; border-radius: 10px; color: #fff; font-size: 15px;
     }
     #manual-input::placeholder { color: #444; }
-    #manual-btn {
-      padding: 11px 16px; background: #2a2a2a; border: none;
-      border-radius: 10px; color: #ccc; font-size: 14px; font-weight: 600; cursor: pointer;
-    }
+    #manual-btn { padding: 11px 16px; background: #2a2a2a; border: none; border-radius: 10px; color: #ccc; font-size: 14px; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>📚 Scanner ISBN</h1>
-  <p>Scannez le code-barres d'un livre</p>
+  <p>Centrez le code-barres dans la zone</p>
 </header>
 
 <div id="reader"></div>
@@ -110,42 +91,50 @@ layout: null
     detected = isbn;
     isbnValue.textContent = isbn;
     resultCard.classList.add("visible");
-    statusEl.textContent  = "✅ Code-barres détecté !";
+    statusEl.textContent  = "✅ ISBN détecté !";
     if (scanner) scanner.stop().catch(() => {});
   }
 
   function startScanner() {
     stopped = false;
     resultCard.classList.remove("visible");
-    statusEl.textContent = "Pointez vers le code-barres du livre";
+    statusEl.textContent = "Pointez la caméra vers le code-barres";
 
     scanner = new Html5Qrcode("reader");
     scanner.start(
       { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 280, height: 100 }, aspectRatio: 1.5 },
+      {
+        fps: 15,
+        // Boîte horizontale adaptée aux codes-barres EAN
+        qrbox: { width: 300, height: 120 },
+        // ← CLEF : on spécifie explicitement EAN-13
+        formatsToSupport: [
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E
+        ]
+      },
       (text) => {
         if ((text.startsWith("978") || text.startsWith("979")) && text.length === 13) {
           showResult(text);
         }
       },
-      () => {} // ignore scan errors
+      () => {}
     ).catch(err => {
       statusEl.textContent = "❌ Caméra inaccessible — utilisez la saisie manuelle.";
       console.error(err);
     });
   }
 
-  // ── Copier ──
   function copyToClipboard(text) {
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-    } else {
-      fallbackCopy(text);
-    }
+    } else { fallbackCopy(text); }
   }
   function fallbackCopy(text) {
     const el = document.createElement("textarea");
-    el.value = text; el.style.position = "fixed"; el.style.opacity = "0";
+    el.value = text; el.style.cssText = "position:fixed;opacity:0";
     document.body.appendChild(el); el.focus(); el.select();
     document.execCommand("copy"); document.body.removeChild(el);
   }
@@ -158,7 +147,6 @@ layout: null
 
   scanAgainBtn.addEventListener("click", startScanner);
 
-  // ── Manuel ──
   document.getElementById("manual-btn").addEventListener("click", () => {
     const val = document.getElementById("manual-input").value.trim();
     if (val) showResult(val);
