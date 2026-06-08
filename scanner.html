@@ -13,42 +13,49 @@ layout: null
       background: #0f0f0f; color: #f0f0f0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       min-height: 100dvh; display: flex; flex-direction: column; align-items: center;
+      padding: 0 0 40px;
     }
-    header { width: 100%; padding: 18px 20px 10px; text-align: center; }
-    header h1 { font-size: 20px; font-weight: 700; }
-    header p  { font-size: 13px; color: #888; margin-top: 4px; }
+    header { width: 100%; padding: 24px 20px 8px; text-align: center; }
+    header h1 { font-size: 22px; font-weight: 700; }
+    header p  { font-size: 13px; color: #666; margin-top: 6px; }
 
-    #viewport {
-      position: relative; width: 100%; max-width: 480px;
-      aspect-ratio: 4/3; background: #111; overflow: hidden;
+    /* ── Photo preview ── */
+    #preview-wrap {
+      width: 100%; max-width: 480px; aspect-ratio: 4/3;
+      background: #1a1a1a; overflow: hidden; position: relative;
     }
-    #viewport video, #viewport canvas {
-      position: absolute; top: 0; left: 0;
-      width: 100% !important; height: 100% !important;
-      object-fit: cover;
+    #preview-img {
+      width: 100%; height: 100%; object-fit: contain;
+      display: none;
     }
-    #viewport canvas.drawingBuffer { display: none; }
+    #placeholder {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 10px; color: #333;
+    }
+    #placeholder .icon { font-size: 52px; }
+    #placeholder p { font-size: 13px; }
 
-    /* Viseur */
-    #crosshair {
-      position: absolute; inset: 0; pointer-events: none;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .aim {
-      position: relative; width: 80%; height: 90px;
-      border: 2px solid rgba(255,255,255,0.25); border-radius: 4px;
-    }
-    .aim::before {
-      content: ""; position: absolute;
-      left: 0; right: 0; top: 50%; height: 2px;
-      background: linear-gradient(90deg, transparent, #7c8cf8 30%, #7c8cf8 70%, transparent);
-    }
-
+    /* ── Status ── */
     #status {
-      width: 100%; max-width: 480px; padding: 10px 20px;
-      font-size: 13px; color: #888; text-align: center; min-height: 38px;
+      width: 100%; max-width: 480px; padding: 12px 20px;
+      font-size: 13px; color: #888; text-align: center; min-height: 42px;
     }
 
+    /* ── Bouton photo ── */
+    #photo-btn-wrap {
+      width: calc(100% - 40px); max-width: 440px; margin-bottom: 16px;
+    }
+    #photo-btn {
+      display: block; width: 100%; padding: 16px;
+      background: #7c8cf8; color: #fff;
+      border: none; border-radius: 12px;
+      font-size: 17px; font-weight: 700; cursor: pointer;
+      letter-spacing: -0.2px;
+    }
+    #photo-input { display: none; }
+
+    /* ── Result card ── */
     #result-card {
       display: none; width: calc(100% - 40px); max-width: 440px;
       background: #1c1c1c; border: 1px solid #2e2e2e;
@@ -56,13 +63,14 @@ layout: null
     }
     #result-card.visible { display: block; }
     #result-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
-    #isbn-value   { font-size: 26px; font-weight: 700; letter-spacing: 2px; color: #fff; margin-bottom: 14px; }
+    #isbn-value   { font-size: 28px; font-weight: 700; letter-spacing: 3px; color: #fff; margin-bottom: 14px; font-variant-numeric: tabular-nums; }
     .btn { display: block; width: 100%; padding: 13px; border-radius: 10px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; }
     .btn-primary   { background: #7c8cf8; color: #fff; margin-bottom: 8px; }
     .btn-secondary { background: #2a2a2a; color: #ccc; }
 
-    #manual { width: calc(100% - 40px); max-width: 440px; margin-top: 4px; padding-bottom: 32px; }
-    #manual p { font-size: 12px; color: #555; text-align: center; margin-bottom: 10px; }
+    /* ── Manual ── */
+    #manual { width: calc(100% - 40px); max-width: 440px; }
+    #manual p { font-size: 12px; color: #444; text-align: center; margin-bottom: 10px; }
     #manual-row { display: flex; gap: 8px; }
     #manual-input {
       flex: 1; padding: 11px 14px; background: #1c1c1c;
@@ -70,25 +78,44 @@ layout: null
     }
     #manual-input::placeholder { color: #444; }
     #manual-btn { padding: 11px 16px; background: #2a2a2a; border: none; border-radius: 10px; color: #ccc; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+    /* Spinner */
+    .spinner {
+      display: inline-block; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+      vertical-align: middle; margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
 <header>
   <h1>📚 Scanner ISBN</h1>
-  <p>Centrez le code-barres dans la zone bleue</p>
+  <p>Prenez une photo du code-barres</p>
 </header>
 
-<div id="viewport">
-  <div id="crosshair"><div class="aim"></div></div>
+<div id="preview-wrap">
+  <img id="preview-img" alt="preview">
+  <div id="placeholder">
+    <div class="icon">📷</div>
+    <p>La photo apparaîtra ici</p>
+  </div>
 </div>
-<div id="status">Chargement…</div>
+
+<div id="status">Prêt à scanner</div>
+
+<div id="photo-btn-wrap">
+  <button id="photo-btn">📷 Prendre une photo</button>
+  <input id="photo-input" type="file" accept="image/*" capture="environment">
+</div>
 
 <div id="result-card">
   <div id="result-label">ISBN détecté</div>
   <div id="isbn-value">—</div>
   <button class="btn btn-primary"   id="copy-btn">📋 Copier l'ISBN</button>
-  <button class="btn btn-secondary" id="scan-again-btn">🔄 Scanner à nouveau</button>
+  <button class="btn btn-secondary" id="retry-btn">🔄 Réessayer</button>
 </div>
 
 <div id="manual">
@@ -99,73 +126,93 @@ layout: null
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2@1.8.4/dist/quagga.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js"></script>
 <script>
-  const statusEl    = document.getElementById("status");
-  const resultCard  = document.getElementById("result-card");
-  const isbnValue   = document.getElementById("isbn-value");
-  const copyBtn     = document.getElementById("copy-btn");
-  const scanAgainBtn= document.getElementById("scan-again-btn");
+  const statusEl   = document.getElementById("status");
+  const resultCard = document.getElementById("result-card");
+  const isbnValue  = document.getElementById("isbn-value");
+  const copyBtn    = document.getElementById("copy-btn");
+  const previewImg = document.getElementById("preview-img");
+  const placeholder= document.getElementById("placeholder");
+  const photoBtn   = document.getElementById("photo-btn");
+  const photoInput = document.getElementById("photo-input");
 
   let detected = "";
-  let running  = false;
+  let reader   = null;
+
+  function initReader() {
+    const hints = new Map();
+    hints.set(ZXing.DecodeHintType.POSSIBLE_FORMATS, [
+      ZXing.BarcodeFormat.EAN_13,
+      ZXing.BarcodeFormat.EAN_8
+    ]);
+    hints.set(ZXing.DecodeHintType.TRY_HARDER, true);
+    reader = new ZXing.MultiFormatReader();
+    reader.setHints(hints);
+  }
 
   function showResult(isbn) {
     detected = isbn;
     isbnValue.textContent = isbn;
     resultCard.classList.add("visible");
     statusEl.textContent = "✅ ISBN détecté !";
-    Quagga.stop();
-    running = false;
+    photoBtn.textContent = "📷 Autre photo";
   }
 
-  function startScanner() {
+  function decodeImage(file) {
+    statusEl.innerHTML = '<span class="spinner"></span>Décodage en cours…';
     resultCard.classList.remove("visible");
-    statusEl.textContent = "Démarrage de la caméra…";
 
-    Quagga.init({
-      inputStream: {
-        type: "LiveStream",
-        target: document.getElementById("viewport"),
-        constraints: {
-          width:  { min: 640 },
-          height: { min: 480 },
-          facingMode: "environment",
-          aspectRatio: { min: 1, max: 2 }
+    const url = URL.createObjectURL(file);
+
+    // Affiche la preview
+    previewImg.src = url;
+    previewImg.style.display = "block";
+    placeholder.style.display = "none";
+
+    const img = new Image();
+    img.onload = () => {
+      try {
+        // Dessine sur canvas pour ZXing
+        const canvas  = document.createElement("canvas");
+        canvas.width  = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+
+        const luminance = new ZXing.HTMLCanvasElementLuminanceSource(canvas);
+        const bitmap    = new ZXing.BinaryBitmap(new ZXing.HybridBinarizer(luminance));
+        const result    = reader.decode(bitmap);
+        const code      = result.getText();
+
+        if ((code.startsWith("978") || code.startsWith("979")) && code.length === 13) {
+          showResult(code);
+        } else {
+          statusEl.textContent = "⚠️ Code détecté mais pas un ISBN : " + code;
         }
-      },
-      locator: { patchSize: "medium", halfSample: true },
-      numOfWorkers: 0,   // ← obligatoire sur iOS Safari
-      frequency: 10,
-      decoder: {
-        readers: ["ean_reader", "ean_8_reader"],
-        debug: { drawBoundingBox: false, showFrequency: false }
-      },
-      locate: true
-    }, function(err) {
-      if (err) {
-        statusEl.textContent = "❌ " + err.message;
-        return;
+      } catch (e) {
+        statusEl.textContent = "❌ Pas de code-barres détecté. Réessayez avec plus de lumière.";
       }
-      Quagga.start();
-      running = true;
-      statusEl.textContent = "Pointez le code-barres dans la zone";
-    });
-
-    Quagga.onDetected(function(result) {
-      const code = result.codeResult.code;
-      const err  = result.codeResult.decodedCodes
-        .filter(x => x.error !== undefined)
-        .map(x => x.error);
-      const avgErr = err.length ? err.reduce((a,b) => a+b, 0) / err.length : 1;
-
-      // Filtre qualité + ISBN valide
-      if (avgErr < 0.15 && code.length === 13 && (code.startsWith("978") || code.startsWith("979"))) {
-        showResult(code);
-      }
-    });
+      URL.revokeObjectURL(url);
+    };
+    img.src = url;
   }
 
+  // ── Bouton photo ──
+  photoBtn.addEventListener("click", () => photoInput.click());
+  photoInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file) decodeImage(file);
+    photoInput.value = ""; // reset pour pouvoir reprendre la même photo
+  });
+
+  // ── Retry ──
+  document.getElementById("retry-btn").addEventListener("click", () => {
+    resultCard.classList.remove("visible");
+    photoInput.click();
+  });
+
+  // ── Copier ──
   function copyToClipboard(text) {
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
@@ -177,15 +224,13 @@ layout: null
     document.body.appendChild(el); el.focus(); el.select();
     document.execCommand("copy"); document.body.removeChild(el);
   }
-
   copyBtn.addEventListener("click", () => {
     copyToClipboard(detected);
     copyBtn.textContent = "✅ Copié !";
     setTimeout(() => copyBtn.textContent = "📋 Copier l'ISBN", 2500);
   });
 
-  scanAgainBtn.addEventListener("click", startScanner);
-
+  // ── Manuel ──
   document.getElementById("manual-btn").addEventListener("click", () => {
     const val = document.getElementById("manual-input").value.trim();
     if (val) showResult(val);
@@ -194,7 +239,7 @@ layout: null
     if (e.key === "Enter") document.getElementById("manual-btn").click();
   });
 
-  startScanner();
+  initReader();
 </script>
 </body>
 </html>
